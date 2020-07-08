@@ -8,7 +8,15 @@
   },
   "rules": {
     "import/prefer-default-export": "off",
-    "import/extensions": "off"
+    "import/extensions": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"],
+    "no-unused-expressions": [
+      "error", {
+        "allowTernary": true
+      }
+    ],
+    "max-len": ["error", { "code": 120 }]
   },
   "settings": {
     "import/resolver": {
