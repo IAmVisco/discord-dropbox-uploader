@@ -12,17 +12,18 @@ const commandFiles = fs.readdirSync('./src/commands').filter((file) => file.ends
 
 client.commands = new Discord.Collection();
 
+(async () => {
 // eslint-disable-next-line no-restricted-syntax
-for (const file of commandFiles) {
-  // eslint-disable-next-line global-require,import/no-dynamic-require
-  import(`./commands/${file}`).then((commands) => {
+  for (const file of commandFiles) {
+    // eslint-disable-next-line no-await-in-loop
+    const { default: commands } = await import(`./commands/${file}`);
     if (Array.isArray(commands)) {
       commands.forEach((c) => client.commands.set(c.name, c));
     } else {
       client.commands.set(commands.name, commands);
     }
-  });
-}
+  }
+})();
 
 client.once('ready', () => {
   const botVersion = process.env.npm_package_version ? `v${process.env.npm_package_version}` : '';
@@ -61,9 +62,9 @@ client.on('message', async (message: Discord.Message) => {
 
       return message.channel.send(reply);
     }
-    return command.execute(message, args);
+    return await command.execute(message, args);
   } catch (error) {
-    logger.error(error);
+    logger.error(error.error || error);
     return message.channel.send('There was an error trying to execute that command!');
   }
 });

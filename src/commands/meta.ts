@@ -35,15 +35,14 @@ const help: Command = {
       .setThumbnail(user.avatarURL({ dynamic: true }))
       .setDescription('Uploads your stuff to Dropbox.')
       .setTimestamp();
+    const prefix = process.env.BOT_PREFIX;
     Object.keys(orderedCommands).forEach((k) => {
-      if (orderedCommands[k].length > 0) {
+      if (orderedCommands[k].length) {
         embed.addField('Group', `**${k}**`);
         orderedCommands[k].forEach((c) => {
-          const prefix = process.env.BOT_PREFIX;
-          let commandName = `${prefix}${c.name}`;
-          if (c.aliases) {
-            commandName = `${commandName}, ${c.aliases.map((a) => `${prefix}${a}`).join(', ')}`;
-          }
+          const commandName = c.aliases
+            ? `${prefix}${c.name} [${c.aliases.join(', ')}]`
+            : `${prefix}${c.name}`;
           embed.addField(commandName, c.description, true);
         });
       }
@@ -65,4 +64,4 @@ const ping: Command = {
   },
 };
 
-module.exports = [help, ping];
+export default [help, ping];
