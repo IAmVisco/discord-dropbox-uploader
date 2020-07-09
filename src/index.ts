@@ -2,8 +2,7 @@ import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as Discord from 'discord.js';
 import { logger } from './helpers/logger';
-
-import { CustomClient } from './types';
+import { CustomClient, CustomMessage } from './types';
 
 dotenv.config();
 const client: CustomClient = new Discord.Client();
@@ -32,7 +31,7 @@ client.once('ready', () => {
 });
 
 /* eslint-disable consistent-return */
-client.on('message', async (message: Discord.Message) => {
+client.on('message', async (message: CustomMessage) => {
   if (!message.content.startsWith(prefix) || message.author.bot) {
     return;
   }

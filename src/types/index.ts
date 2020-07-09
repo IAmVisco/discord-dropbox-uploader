@@ -4,6 +4,10 @@ export interface CustomClient extends Client {
   commands?: Collection<string, Command>;
 }
 
+export interface CustomMessage extends Message {
+  client: CustomClient
+}
+
 export interface Command {
   name: string;
   group: string;
@@ -12,5 +16,5 @@ export interface Command {
   aliases?: Array<string>;
   description: string;
   hidden?: boolean;
-  execute: (message: Message & { client: CustomClient}, args?: Array<string>) => Promise<Message | void>;
+  execute: (message: CustomMessage, args?: Array<string>) => Promise<Message | void>;
 }
