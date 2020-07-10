@@ -17,9 +17,9 @@ client.commands = new Discord.Collection();
     // eslint-disable-next-line no-await-in-loop
     const { default: commands } = await import(`./commands/${file}`);
     if (Array.isArray(commands)) {
-      commands.forEach((c) => client.commands.set(c.name, c));
+      commands.forEach((c) => client.commands!.set(c.name, c));
     } else {
-      client.commands.set(commands.name, commands);
+      client.commands!.set(commands.name, commands);
     }
   }
 })();
@@ -27,7 +27,7 @@ client.commands = new Discord.Collection();
 client.once('ready', () => {
   const botVersion = process.env.npm_package_version ? `v${process.env.npm_package_version}` : '';
   logger.info(`===== Dropbox Uploader Bot ${botVersion} ready =====`);
-  logger.info(`Logged in as '${client.user.tag}' (${client.user.id})`);
+  logger.info(`Logged in as '${client.user?.tag}' (${client.user?.id})`);
 });
 
 /* eslint-disable consistent-return */
@@ -36,10 +36,10 @@ client.on('message', async (message: CustomMessage) => {
     return;
   }
   const args = message.content.slice(prefix.length).split(/ +/);
-  const commandName = args.shift().toLowerCase();
+  const commandName = args.shift()!.toLowerCase();
 
-  const command = client.commands.get(commandName)
-    || client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
+  const command = client.commands!.get(commandName)
+    || client.commands!.find((cmd) => !!cmd.aliases && cmd.aliases.includes(commandName));
 
   if (!command) {
     return;
@@ -63,7 +63,7 @@ client.on('message', async (message: CustomMessage) => {
     }
     return await command.execute(message, args);
   } catch (error) {
-    logger.error(error.error || error);
+    logger.error('Command error', error.error ? error.error : error);
     return message.channel.send('There was an error trying to execute that command!');
   }
 });

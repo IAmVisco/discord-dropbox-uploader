@@ -12,9 +12,9 @@ const help: Command = {
   description: 'Prints out this message.',
   execute(message) {
     const { user } = message.client;
-    const orderedCommands = {};
-    const commands = { uncategorized: [] };
-    message.client.commands.forEach((c) => {
+    const orderedCommands: { [key: string]: Array<Command> } = {};
+    const commands: { [key: string]: Array<Command> } = { uncategorized: [] };
+    message.client.commands!.forEach((c) => {
       if (c.group) {
         c.group in commands
           ? commands[c.group].push(c)
@@ -26,13 +26,13 @@ const help: Command = {
     Object.keys(commands).sort().forEach((key) => {
       const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1);
       orderedCommands[capitalizedKey] = commands[key]
-        .sort((a, b) => (a.name > b.name ? 1 : -1))
-        .filter((c) => !c.hidden);
+        .filter((c) => !c.hidden)
+        .sort((a, b) => (a.name > b.name ? 1 : -1));
     });
 
     const embed = new MessageEmbed()
-      .setTitle(`${user.username} commands list`)
-      .setThumbnail(user.avatarURL({ dynamic: true }))
+      .setTitle(`${user?.username} commands list`)
+      .setThumbnail(user?.avatarURL({ dynamic: true }) || '')
       .setDescription('Uploads your stuff to Dropbox.')
       .setTimestamp();
     const prefix = process.env.BOT_PREFIX;

@@ -16,7 +16,8 @@
         "allowTernary": true
       }
     ],
-    "max-len": ["error", { "code": 120 }]
+    "max-len": ["error", { "code": 120 }],
+    "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }]
   },
   "settings": {
     "import/resolver": {
