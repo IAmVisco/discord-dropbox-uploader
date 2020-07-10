@@ -32,10 +32,9 @@ client.once('ready', () => {
   logger.info(`Logged in as '${client.user?.tag}' (${client.user?.id})`);
 });
 
-/* eslint-disable consistent-return */
 client.on('message', async (message: CustomMessage) => {
   if (!message.content.startsWith(prefix) || message.author.bot) {
-    return;
+    return null;
   }
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift()!.toLowerCase();
@@ -44,7 +43,7 @@ client.on('message', async (message: CustomMessage) => {
     || client.commands!.find((cmd) => !!cmd.aliases && cmd.aliases.includes(commandName));
 
   if (!command) {
-    return;
+    return null;
   }
 
   try {
@@ -55,21 +54,23 @@ client.on('message', async (message: CustomMessage) => {
       logger.info(`Executing command ${message.content} by @${message.author.tag} in DMs`);
     }
 
-    if (command.args && !args.length) {
-      let reply = 'You didn\'t provide any arguments!';
-      if (command.usage) {
-        reply += `\nUsage: ${prefix}${command.name} ${command.usage}`;
-      }
-
+    if (command.permissions && !message.member?.hasPermission(command.permissions)) {
+      const reply = 'You need higher permissions to execute this command!';
       return message.channel.send(reply);
     }
+
+    if (command.args && !args.length) {
+      const reply = 'You didn\'t provide any arguments!'
+        + `${command.usage && `\nUsage: ${prefix}${command.name} ${command.usage}`}`;
+      return message.channel.send(reply);
+    }
+
     return await command.execute(message, args);
   } catch (error) {
     logger.error('Command error', error.error ? error.error : error);
     return message.channel.send('There was an error trying to execute that command!');
   }
 });
-/* eslint-enable consistent-return */
 
 client.on('error', logger.error);
 

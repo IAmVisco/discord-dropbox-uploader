@@ -1,4 +1,6 @@
-import type { Client, Collection, Message } from 'discord.js';
+import type {
+  Client, Collection, Message, PermissionResolvable,
+} from 'discord.js';
 
 export interface CustomClient extends Client {
   commands?: Collection<string, Command>;
@@ -16,5 +18,6 @@ export interface Command {
   aliases?: Array<string>;
   description: string;
   hidden?: boolean;
+  permissions?: PermissionResolvable;
   execute: (message: CustomMessage, args?: Array<string>) => Promise<Message | void>;
 }
