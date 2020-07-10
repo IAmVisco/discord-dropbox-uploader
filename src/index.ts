@@ -5,9 +5,11 @@ import { logger } from './helpers/logger';
 import { CustomClient, CustomMessage } from './types';
 
 dotenv.config();
+const compiled = __filename.endsWith('.js');
 const client: CustomClient = new Discord.Client();
 const prefix = process.env.BOT_PREFIX ?? '!!';
-const commandFiles = fs.readdirSync('./src/commands').filter((file) => file.endsWith('.ts'));
+const commandFiles = fs.readdirSync(`./${compiled ? 'dist' : 'src'}/commands`)
+  .filter((file) => file.endsWith(compiled ? '.js' : '.ts'));
 
 client.commands = new Discord.Collection();
 
