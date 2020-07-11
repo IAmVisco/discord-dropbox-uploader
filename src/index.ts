@@ -1,15 +1,15 @@
 import * as dotenv from 'dotenv';
-import * as fs from 'fs';
 import * as Discord from 'discord.js';
+import * as fs from 'fs';
+import * as path from 'path';
 import { logger } from './helpers/logger';
 import { CustomClient, CustomMessage } from './types';
 
 dotenv.config();
-const compiled = __filename.endsWith('.js');
 const client: CustomClient = new Discord.Client();
 const prefix = process.env.BOT_PREFIX ?? '!!';
-const commandFiles = fs.readdirSync(`./${compiled ? 'dist' : 'src'}/commands`)
-  .filter((file) => file.match(/[^.]+\.[tj]s$/g));
+const commandFiles = fs.readdirSync(path.join(__dirname, 'commands'))
+  .filter((file) => file.match(/^([^.].*)\.(js|ts)$/g));
 
 client.commands = new Discord.Collection();
 
