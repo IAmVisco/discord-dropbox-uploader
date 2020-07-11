@@ -46,7 +46,7 @@ const upload: Command = {
   group,
   aliases: ['up'],
   description: 'Uploads message attachments to Dropbox.',
-  permissions: ['ADMINISTRATOR'],
+  role: process.env.DROPBOX_ROLE,
   async execute(message, args) {
     let attachments = await tryGetMessageAttachments(message, args);
     if (!attachments) {

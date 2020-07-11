@@ -9,7 +9,7 @@ const compiled = __filename.endsWith('.js');
 const client: CustomClient = new Discord.Client();
 const prefix = process.env.BOT_PREFIX ?? '!!';
 const commandFiles = fs.readdirSync(`./${compiled ? 'dist' : 'src'}/commands`)
-  .filter((file) => file.endsWith(compiled ? '.js' : '.ts'));
+  .filter((file) => file.match(/[^.]+\.[tj]s$/g));
 
 client.commands = new Discord.Collection();
 
@@ -27,8 +27,7 @@ client.commands = new Discord.Collection();
 })();
 
 client.once('ready', () => {
-  const botVersion = process.env.npm_package_version ? `v${process.env.npm_package_version}` : '';
-  logger.info(`===== Dropbox Uploader Bot ${botVersion} ready =====`);
+  logger.info('===== Dropbox Uploader Bot ready =====');
   logger.info(`Logged in as '${client.user?.tag}' (${client.user?.id})`);
 });
 
@@ -56,6 +55,11 @@ client.on('message', async (message: CustomMessage) => {
 
     if (command.permissions && !message.member?.hasPermission(command.permissions)) {
       const reply = 'You need higher permissions to execute this command!';
+      return message.channel.send(reply);
+    }
+
+    if (command.role && !message.member?.roles.cache.has(command.role)) {
+      const reply = 'You need specific role to execute this command!';
       return message.channel.send(reply);
     }
 
