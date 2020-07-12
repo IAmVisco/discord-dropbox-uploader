@@ -14,9 +14,9 @@ Upload captures attachments on the following order:
  3. Message above the command - its attachments.
  4. Message above the command - it's argument.
  Argument can be one of the following:
- - Direct link to file.
- - Link to Discord message (RMB - Copy Message Link).
- - Message Snowflake.
+    - Direct link to file.
+    - Link to Discord message (RMB - Copy Message Link).
+    - Message Snowflake.
 
 ## Installation and usage
 Copy `.env.example` into `.env` and fill up env vars. Everything should be self-explanatory. Role can be omitted.
@@ -31,4 +31,4 @@ npm run build
 node dist/index.js
 ```
 ## License
-MIT.
+MIT
