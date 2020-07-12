@@ -54,12 +54,12 @@ client.on('message', async (message: CustomMessage) => {
     }
 
     if (command.permissions && !message.member?.hasPermission(command.permissions)) {
-      const reply = 'You need higher permissions to execute this command!';
+      const reply = ':warning: | You need higher permissions to execute this command!';
       return message.channel.send(reply);
     }
 
     if (command.role && !message.member?.roles.cache.has(command.role)) {
-      const reply = 'You need specific role to execute this command!';
+      const reply = ':warning: | You need specific role to execute this command!';
       return message.channel.send(reply);
     }
 
@@ -71,8 +71,9 @@ client.on('message', async (message: CustomMessage) => {
 
     return await command.execute(message, args);
   } catch (error) {
-    logger.error('Command error', error.error ? error.error : error);
-    return message.channel.send('There was an error trying to execute that command!');
+    logger.error(`Command error, Message Snowflake: ${message.id}`, error.error ? error.error : error);
+    return message.channel.send(':warning: | There was an error trying to execute that command!'
+      + ` Debug Snowflake: ${message.id}`);
   }
 });
 

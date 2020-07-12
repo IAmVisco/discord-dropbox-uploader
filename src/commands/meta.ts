@@ -60,7 +60,9 @@ const ping: Command = {
     const msg = await message.channel.send('Pong!');
     const pingTime = moment(msg.createdTimestamp).diff(moment(message.createdTimestamp));
 
-    return msg.edit(`Pong! Time taken: ${pingTime}ms`);
+    return msg.edit('Pong!'
+      + `\n:hourglass: Message ping: ${pingTime}ms`
+      + `\n:heartbeat: Websocket ping: ${message.client.ws.ping}ms`);
   },
 };
 

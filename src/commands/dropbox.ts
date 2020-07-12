@@ -54,12 +54,12 @@ const upload: Command = {
     }
 
     if (attachments) {
-      const resultMessage = await message.channel.send('Started upload.');
+      const resultMessage = await message.channel.send(':arrow_up: | Uploading...');
       const promises = attachments.map(async (a) => dropboxService.uploadFile(a.url, a.name));
       await Promise.all(promises);
-      return resultMessage.edit('Successfully uploaded files.');
+      return resultMessage.edit(':white_check_mark: | Successfully uploaded files.');
     }
-    return message.channel.send('No file found for upload.');
+    return message.channel.send(':warning: | No file found for upload.');
   },
 };
 
